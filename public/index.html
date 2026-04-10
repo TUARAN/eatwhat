@@ -123,63 +123,36 @@
     }
 
     .eyebrow {
-      margin: 0 0 10px;
-      color: var(--green-deep);
-      font-size: clamp(18px, 5vw, 24px);
-      font-weight: 700;
-      line-height: 1.4;
-      letter-spacing: -0.02em;
-    }
-
-    .site-title {
-      margin: 0 0 14px;
-      font-size: clamp(24px, 7vw, 36px);
-      line-height: 1.05;
-      font-weight: 700;
-      color: var(--text-main);
-      letter-spacing: -0.04em;
-    }
-
-    h1 {
       margin: 0;
-      font-size: clamp(50px, 15vw, 82px);
-      line-height: 0.92;
+      font-size: clamp(52px, 16vw, 88px);
+      line-height: 0.9;
       letter-spacing: -0.05em;
       font-weight: 700;
-    }
-
-    .headline-light {
-      display: block;
-      color: var(--text-main);
-    }
-
-    .headline-strong {
-      display: block;
       color: var(--green-deep);
-      margin-top: 4px;
+      text-wrap: balance;
     }
 
-    .headline-mark {
+    .hero-title {
       position: relative;
       display: inline-block;
-      padding: 0 6px;
+      padding: 0 10px 6px 4px;
     }
 
-    .headline-mark::after {
+    .hero-title::after {
       content: "";
       position: absolute;
-      left: 4px;
-      right: 4px;
-      bottom: 5px;
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(245, 239, 178, 0.7);
+      left: 2px;
+      right: 8px;
+      bottom: 10px;
+      height: 18px;
+      border-radius: 999px 999px 12px 12px;
+      background: linear-gradient(90deg, rgba(248, 238, 176, 0.82), rgba(198, 241, 207, 0.72));
       z-index: -1;
     }
 
     .subtext {
-      margin: 16px 0 0;
-      max-width: 15em;
+      margin: 18px 0 0;
+      max-width: 13em;
       color: var(--text-sub);
       font-size: 16px;
       line-height: 1.7;
@@ -378,11 +351,6 @@
       border: 1px solid rgba(232, 223, 191, 0.5);
     }
 
-    .status {
-      font-size: 13px;
-      color: var(--text-soft);
-    }
-
     @media (max-width: 420px) {
       .shell {
         padding: 10px;
@@ -430,12 +398,7 @@
         </div>
 
         <header class="hero">
-          <p class="eyebrow">吃什么？！帮我决定</p>
-          <p class="site-title">吃什么帮你选</p>
-          <h1>
-            <span class="headline-light">今天</span>
-            <span class="headline-strong headline-mark">吃什么</span>
-          </h1>
+          <h1 class="hero-title">吃什么？！帮我决定</h1>
           <p class="subtext">往左滑，还有“小茉莉吃什么”。</p>
         </header>
 
@@ -456,7 +419,6 @@
               <span class="dot"></span>
             </div>
           </div>
-          <div class="status" id="adultStatus"></div>
         </div>
 
         <footer class="footer">
@@ -506,7 +468,6 @@
     const dishRecipe = document.getElementById("dishRecipe");
     const dishHint = document.getElementById("dishHint");
     const pickButton = document.getElementById("pickButton");
-    const adultStatus = document.getElementById("adultStatus");
     const adultCount = document.getElementById("adultCount");
     const babyGrid = document.getElementById("babyGrid");
     const babyCount = document.getElementById("babyCount");
@@ -550,7 +511,6 @@
 
     function pickDish() {
       if (adultMenu.length === 0) {
-        adultStatus.textContent = "菜单还没加载完成。";
         return;
       }
 
@@ -570,7 +530,6 @@
       dishRating.textContent = selected.rating_label;
       dishRecipe.innerHTML = "<strong>小教程：</strong>" + selected.short_recipe;
       dishHint.textContent = period.hint;
-      adultStatus.textContent = "来自 D1 菜单库";
     }
 
     function renderBabyMenu() {
@@ -598,8 +557,6 @@
     }
 
     async function loadMenu() {
-      adultStatus.textContent = "正在读取菜单库…";
-
       try {
         const [adultResponse, babyResponse] = await Promise.all([
           fetch("/api/dishes?audience=adult"),
@@ -617,12 +574,10 @@
         babyMenu = babyData.dishes || [];
 
         adultCount.textContent = `共 ${adultMenu.length} 道菜`;
-        adultStatus.textContent = "菜单已连接 D1";
         dishRecipe.innerHTML = "<strong>小教程：</strong>菜单就绪，点一下开始抽菜。";
 
         renderBabyMenu();
       } catch (error) {
-        adultStatus.textContent = "菜单读取失败";
         adultCount.textContent = "暂时无法读取菜单";
         dishRecipe.innerHTML = "<strong>小教程：</strong>接口暂时不可用，请稍后再试。";
         renderBabyMenu();
