@@ -3,27 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>佳燃股份・今天吃什么</title>
+  <title>吃什么？！！帮我决定</title>
   <style>
     :root {
-      --bg-start: #f9fff9;
-      --bg-mid: #f0fbf5;
-      --bg-end: #eef8ff;
-      --panel: rgba(255, 255, 255, 0.8);
+      --bg-1: #fbfff8;
+      --bg-2: #f3fbf4;
+      --bg-3: #eef8ff;
+      --panel: rgba(255, 255, 255, 0.78);
       --panel-strong: rgba(255, 255, 255, 0.92);
-      --panel-soft: rgba(245, 253, 248, 0.8);
-      --panel-border: rgba(166, 218, 201, 0.38);
-      --text-main: #20453c;
-      --text-sub: #67837b;
-      --text-soft: #8ea39d;
-      --accent-green: #6cc8a7;
-      --accent-blue: #6cb9df;
-      --accent-deep: #3e9b85;
-      --accent-warm: #fff5df;
-      --glow-green: rgba(170, 235, 196, 0.36);
-      --glow-blue: rgba(167, 222, 255, 0.28);
-      --shadow: 0 24px 70px rgba(104, 157, 144, 0.15);
-      --inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      --line: rgba(169, 215, 196, 0.34);
+      --text-main: #1f433b;
+      --text-sub: #6f8d84;
+      --text-soft: #91a6a0;
+      --green: #6fc3a3;
+      --blue: #77b9e4;
+      --green-deep: #42957f;
+      --tag: #edf8f1;
+      --shadow: 0 24px 60px rgba(98, 150, 137, 0.12);
     }
 
     * {
@@ -42,237 +38,228 @@
       font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       color: var(--text-main);
       background:
-        radial-gradient(circle at top left, var(--glow-green), transparent 34%),
-        radial-gradient(circle at right 12% top 18%, var(--glow-blue), transparent 28%),
-        radial-gradient(circle at center bottom, rgba(227, 245, 205, 0.34), transparent 36%),
-        linear-gradient(160deg, var(--bg-start), var(--bg-mid) 52%, var(--bg-end));
-      display: flex;
-      justify-content: center;
-      padding: 0;
+        radial-gradient(circle at left top, rgba(181, 236, 191, 0.34), transparent 32%),
+        radial-gradient(circle at right 18% top 22%, rgba(171, 222, 255, 0.24), transparent 24%),
+        linear-gradient(165deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
       -webkit-text-size-adjust: 100%;
       overscroll-behavior: none;
     }
 
-    .app {
-      width: min(100%, 520px);
+    .shell {
+      width: min(100%, 560px);
       min-height: 100vh;
       min-height: 100svh;
-      padding: 16px;
-      display: flex;
+      margin: 0 auto;
+      padding: 14px;
     }
 
-    .panel {
-      width: 100%;
-      min-height: calc(100vh - 32px);
-      min-height: calc(100svh - 32px);
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
+    .slides {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 100%;
+      gap: 14px;
+      min-height: calc(100vh - 28px);
+      min-height: calc(100svh - 28px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      touch-action: pan-x;
+    }
+
+    .slides::-webkit-scrollbar {
+      display: none;
+    }
+
+    .page {
+      scroll-snap-align: start;
+      min-height: calc(100vh - 28px);
+      min-height: calc(100svh - 28px);
       border-radius: 32px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
-      box-shadow: var(--inner-shadow), var(--shadow);
       padding: 18px;
-      text-align: left;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      overflow: hidden;
     }
 
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
-    .site-badge,
-    .meal-badge {
+    .chip {
       display: inline-flex;
       align-items: center;
-      min-height: 36px;
-      padding: 0 14px;
+      min-height: 34px;
+      padding: 0 13px;
       border-radius: 999px;
+      border: 1px solid rgba(177, 220, 203, 0.36);
+      background: rgba(255, 255, 255, 0.62);
+      color: var(--text-sub);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.04em;
-      background: rgba(255, 255, 255, 0.64);
-      border: 1px solid rgba(175, 223, 208, 0.42);
-      color: var(--text-sub);
       white-space: nowrap;
     }
 
+    .chip.primary-chip {
+      min-height: 42px;
+      padding: 0 16px;
+      font-size: 14px;
+      color: var(--green-deep);
+      background: rgba(255, 255, 255, 0.76);
+    }
+
     .hero {
-      position: relative;
-      padding: 8px 4px 4px;
+      padding: 6px 2px 0;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -14px;
-      top: 12px;
-      width: 132px;
-      height: 132px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(156, 232, 195, 0.32), transparent 72%);
-      pointer-events: none;
-    }
-
-    .hero-kicker {
-      margin: 0 0 8px;
-      font-size: 15px;
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green-deep);
+      font-size: clamp(18px, 5vw, 24px);
+      font-weight: 700;
       line-height: 1.4;
-      color: var(--text-sub);
+      letter-spacing: -0.02em;
     }
 
-    .headline {
-      margin-bottom: 10px;
+    .site-title {
+      margin: 0 0 14px;
+      font-size: clamp(24px, 7vw, 36px);
+      line-height: 1.05;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.04em;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(42px, 12vw, 70px);
-      line-height: 0.94;
+      font-size: clamp(50px, 15vw, 82px);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
       font-weight: 700;
-      letter-spacing: -0.03em;
-      text-wrap: balance;
     }
 
-    .headline-main {
+    .headline-light {
       display: block;
       color: var(--text-main);
     }
 
-    .headline-accent {
+    .headline-strong {
       display: block;
+      color: var(--green-deep);
       margin-top: 4px;
-      color: var(--accent-deep);
     }
 
-    .headline-sub {
-      margin: 12px 0 0;
-      font-size: 18px;
-      line-height: 1.5;
-      color: var(--text-sub);
-      max-width: 340px;
-    }
-
-    .emphasis {
+    .headline-mark {
       position: relative;
       display: inline-block;
       padding: 0 6px;
     }
 
-    .emphasis::after {
+    .headline-mark::after {
       content: "";
       position: absolute;
       left: 4px;
       right: 4px;
-      bottom: 4px;
+      bottom: 5px;
       height: 12px;
       border-radius: 999px;
-      background: rgba(235, 248, 178, 0.62);
+      background: rgba(245, 239, 178, 0.7);
       z-index: -1;
     }
 
+    .subtext {
+      margin: 16px 0 0;
+      max-width: 15em;
+      color: var(--text-sub);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
     .result {
-      position: relative;
-      flex: 1;
-      min-height: 280px;
-      border-radius: 30px;
-      padding: 22px 20px;
+      margin-top: auto;
+      margin-bottom: auto;
+      padding: 22px;
+      border-radius: 28px;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.94)),
-        linear-gradient(135deg, rgba(232, 250, 238, 0.62), rgba(233, 245, 255, 0.5));
-      border: 1px solid rgba(184, 225, 213, 0.56);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 250, 255, 0.92)),
+        linear-gradient(135deg, rgba(233, 250, 239, 0.54), rgba(235, 245, 255, 0.4));
+      border: 1px solid rgba(182, 223, 208, 0.48);
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
       gap: 16px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
-      overflow: hidden;
-    }
-
-    .result::before {
-      content: "";
-      position: absolute;
-      right: -28px;
-      bottom: -34px;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(141, 205, 255, 0.2), transparent 70%);
-      pointer-events: none;
-    }
-
-    .result::after {
-      content: "";
-      position: absolute;
-      left: -28px;
-      top: -28px;
-      width: 112px;
-      height: 112px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(189, 236, 189, 0.22), transparent 70%);
-      pointer-events: none;
+      min-height: 300px;
     }
 
     .result-label {
       display: inline-flex;
       align-items: center;
-      padding: 8px 13px;
+      min-height: 34px;
+      padding: 0 12px;
       border-radius: 999px;
+      background: var(--tag);
+      color: var(--green-deep);
       font-size: 12px;
       font-weight: 700;
-      color: var(--accent-deep);
       letter-spacing: 0.08em;
-      background: rgba(233, 248, 241, 0.96);
     }
 
     .dish-name {
       margin: 0;
-      font-size: clamp(34px, 10vw, 46px);
-      line-height: 1.12;
+      font-size: clamp(34px, 10vw, 48px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
       font-weight: 700;
-      letter-spacing: -0.03em;
       text-wrap: balance;
     }
 
     .rating {
       display: inline-flex;
       align-items: center;
-      justify-content: flex-start;
       min-height: 44px;
-      padding: 10px 16px;
+      padding: 0 16px;
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.88);
-      color: #3f7d6f;
+      color: var(--green-deep);
       font-size: 17px;
       font-weight: 600;
-      letter-spacing: 0.04em;
-      box-shadow: inset 0 0 0 1px rgba(170, 215, 202, 0.28);
+      box-shadow: inset 0 0 0 1px rgba(178, 218, 203, 0.34);
     }
 
     .hint {
-      font-size: 15px;
       color: var(--text-sub);
-      line-height: 1.6;
-      max-width: 20em;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .action {
       width: 100%;
+      min-height: 60px;
       border: none;
-      border-radius: 24px;
-      padding: 20px 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      color: #fff;
       font-size: 19px;
       font-weight: 700;
-      color: #ffffff;
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
-      box-shadow: 0 16px 32px rgba(93, 184, 177, 0.28);
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      box-shadow: 0 16px 30px rgba(95, 179, 170, 0.24);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
@@ -281,86 +268,130 @@
       transform: scale(0.985);
     }
 
-    .action:hover {
-      filter: brightness(1.02);
-      box-shadow: 0 18px 34px rgba(89, 188, 180, 0.32);
-    }
-
-    .meta {
+    .page-nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       color: var(--text-soft);
       font-size: 13px;
     }
 
-    .meta-chip {
-      padding: 9px 13px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.62);
-      border: 1px solid rgba(184, 223, 212, 0.38);
+    .dots {
+      display: inline-flex;
+      gap: 6px;
     }
 
-    .meta-note {
-      font-size: 13px;
-      color: var(--text-soft);
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(145, 166, 160, 0.28);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .dot.is-active {
+      background: var(--green-deep);
+      transform: scale(1.15);
     }
 
     .footer {
-      margin-top: auto;
+      margin-top: 18px;
+      padding: 0 2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 4px 4px 0;
-      font-size: 13px;
+      gap: 10px;
       color: var(--text-soft);
+      font-size: 13px;
     }
 
-    .company {
-      letter-spacing: 0.08em;
+    .baby-title {
+      margin: 0;
+      font-size: clamp(34px, 10vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
     }
 
-    .domain-note {
+    .baby-title span {
+      color: var(--green-deep);
+    }
+
+    .baby-subtext {
+      margin: 14px 0 0;
+      max-width: 16em;
       color: var(--text-sub);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .baby-grid {
+      margin-top: auto;
+      margin-bottom: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .baby-card {
+      padding: 16px 14px;
+      border-radius: 22px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(184, 223, 208, 0.42);
+    }
+
+    .baby-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--text-main);
+    }
+
+    .baby-card p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .baby-note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255, 250, 241, 0.92);
+      color: #7c8375;
+      font-size: 14px;
+      line-height: 1.7;
+      border: 1px solid rgba(232, 223, 191, 0.5);
     }
 
     @media (max-width: 420px) {
-      .app {
+      .shell {
         padding: 10px;
       }
 
-      .panel {
+      .slides,
+      .page {
         min-height: calc(100vh - 20px);
         min-height: calc(100svh - 20px);
+      }
+
+      .page {
         padding: 14px;
         border-radius: 28px;
       }
 
       .topbar {
-        gap: 8px;
+        margin-bottom: 22px;
         flex-wrap: wrap;
       }
 
-      .site-badge,
-      .meal-badge {
-        min-height: 34px;
-        padding: 0 12px;
-      }
-
       .result {
-        min-height: 250px;
-        padding: 18px 16px;
+        min-height: 272px;
+        padding: 18px;
       }
 
-      .action {
-        padding: 18px 18px;
-      }
-
-      .meta {
-        flex-direction: column;
-        align-items: flex-start;
+      .baby-grid {
+        grid-template-columns: 1fr;
       }
 
       .footer {
@@ -371,42 +402,94 @@
   </style>
 </head>
 <body>
-  <main class="app">
-    <section class="panel">
-      <div class="topbar">
-        <div class="site-badge">eatwhat.help · 吃什么帮选</div>
-        <div class="meal-badge" id="mealTag">当前时段推荐</div>
-      </div>
-
-      <header class="hero">
-        <div class="headline">
-          <p class="hero-kicker">吃什么？！！帮我决定</p>
-          <h1>
-            <span class="headline-main">今天</span>
-            <span class="headline-accent emphasis">吃什么</span>
-          </h1>
+  <main class="shell">
+    <div class="slides" id="slides">
+      <section class="page">
+        <div class="topbar">
+          <div class="chip primary-chip">eatwhat.help</div>
+          <div class="chip" id="mealTag">当前时段</div>
         </div>
-        <p class="headline-sub">家庭小清新风格的点菜页，从菜单里随机抽一道，帮你把这顿饭快速定下来。</p>
-      </header>
 
-      <div class="result" id="resultCard" aria-live="polite">
-        <div class="result-label" id="resultLabel">当前推荐</div>
-        <h2 class="dish-name" id="dishName">点击按钮开始抽菜</h2>
-        <div class="rating" id="dishRating">等待推荐</div>
-        <div class="hint" id="dishHint">轻轻一点，看看今天更适合哪一道</div>
-      </div>
+        <header class="hero">
+          <p class="eyebrow">吃什么？！帮我决定</p>
+          <p class="site-title">吃什么帮你选</p>
+          <h1>
+            <span class="headline-light">今天</span>
+            <span class="headline-strong headline-mark">吃什么</span>
+          </h1>
+          <p class="subtext">往左滑，还有“小茉莉吃什么”。</p>
+        </header>
 
-      <button class="action" id="pickButton" type="button">随机推荐今日菜品</button>
-      <div class="meta">
-        <div class="meta-chip">共 40 道候选菜品</div>
-        <div class="meta-note">点一下换一道，反复抽也没问题</div>
-      </div>
+        <div class="result" aria-live="polite">
+          <div class="result-label" id="resultLabel">当前推荐</div>
+          <h2 class="dish-name" id="dishName">点一下开始抽菜</h2>
+          <div class="rating" id="dishRating">等待推荐</div>
+          <div class="hint" id="dishHint">想换一道，就再点一次。</div>
+        </div>
 
-      <footer class="footer">
-        <div class="domain-note">eatwhat.help · 吃什么？帮你决定</div>
-        <div class="company">佳燃股份</div>
-      </footer>
-    </section>
+        <div class="actions">
+          <button class="action" id="pickButton" type="button">帮我决定吃什么</button>
+          <div class="page-nav">
+            <span>左右滑动切换页面</span>
+            <div class="dots" aria-hidden="true">
+              <span class="dot is-active"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <span>40 道菜随机推荐</span>
+          <span>佳燃股份</span>
+        </footer>
+      </section>
+
+      <section class="page">
+        <div class="topbar">
+          <div class="chip">eatwhat.help · 小茉莉吃什么</div>
+          <div class="chip">1 岁宝宝</div>
+        </div>
+
+        <header class="hero">
+          <h2 class="baby-title">小茉莉 <span>吃什么</span></h2>
+          <p class="baby-subtext">适合 1 岁宝宝的日常吃饭图鉴，先从软、碎、清淡开始。</p>
+        </header>
+
+        <div class="baby-grid">
+          <article class="baby-card">
+            <h3>主食</h3>
+            <p>软米饭、小面条、南瓜粥、山药粥、小馄饨。</p>
+          </article>
+          <article class="baby-card">
+            <h3>蛋白质</h3>
+            <p>蒸蛋、鸡肉末、鱼肉泥、牛肉碎、嫩豆腐。</p>
+          </article>
+          <article class="baby-card">
+            <h3>蔬菜</h3>
+            <p>西兰花碎、胡萝卜丁、土豆泥、冬瓜碎、菠菜末。</p>
+          </article>
+          <article class="baby-card">
+            <h3>水果</h3>
+            <p>香蕉、蒸苹果、牛油果、梨泥、熟透的猕猴桃。</p>
+          </article>
+        </div>
+
+        <div class="baby-note">尽量少盐少糖，注意大小和软硬度，避免整颗坚果、整粒葡萄这类容易噎住的食物。</div>
+
+        <div class="page-nav" style="margin-top: 18px;">
+          <span>往右滑，回到主页</span>
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span>
+            <span class="dot is-active"></span>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <span>宝宝吃饭也可以慢慢决定</span>
+          <span>佳燃股份</span>
+        </footer>
+      </section>
+    </div>
   </main>
 
   <script>
@@ -453,6 +536,8 @@
       { name: "香菇炒青菜", rating: "★★★★（4 星）" }
     ];
 
+    const slides = document.getElementById("slides");
+    const dots = document.querySelectorAll(".page-nav .dot");
     const mealTag = document.getElementById("mealTag");
     const resultLabel = document.getElementById("resultLabel");
     const dishName = document.getElementById("dishName");
@@ -467,42 +552,22 @@
       const hour = new Date().getHours();
 
       if (hour >= 5 && hour < 10) {
-        return {
-          tag: "早餐时段",
-          label: "早餐推荐",
-          hint: "新的一天，从认真吃饭开始"
-        };
+        return { tag: "早餐时段", label: "早餐推荐", hint: "新的一天，从吃好第一顿开始。" };
       }
 
       if (hour >= 10 && hour < 14) {
-        return {
-          tag: "午餐时段",
-          label: "午餐推荐",
-          hint: "中午这一顿，选个稳妥又舒服的"
-        };
+        return { tag: "午餐时段", label: "午餐推荐", hint: "中午这一顿，选个稳妥的。" };
       }
 
       if (hour >= 14 && hour < 17) {
-        return {
-          tag: "下午时段",
-          label: "下午加餐推荐",
-          hint: "下午也可以先想好晚点吃什么"
-        };
+        return { tag: "下午时段", label: "下午加餐", hint: "先看看，晚点吃什么也能心里有数。" };
       }
 
       if (hour >= 17 && hour < 21) {
-        return {
-          tag: "晚餐时段",
-          label: "晚餐推荐",
-          hint: "忙完一天，晚饭值得认真挑一挑"
-        };
+        return { tag: "晚餐时段", label: "晚餐推荐", hint: "忙完一天，晚饭可以认真一点。" };
       }
 
-      return {
-        tag: "夜间时段",
-        label: "夜宵灵感",
-        hint: "现在时间不早了，也可以先收藏这道菜"
-      };
+      return { tag: "夜间时段", label: "夜宵灵感", hint: "现在不一定马上吃，也可以先记住这道。" };
     }
 
     function syncMealPeriod() {
@@ -533,6 +598,13 @@
       dishHint.textContent = period.hint;
     }
 
+    function syncDots() {
+      const pageIndex = Math.round(slides.scrollLeft / slides.clientWidth);
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("is-active", index === pageIndex);
+      });
+    }
+
     document.addEventListener("dblclick", (event) => {
       event.preventDefault();
     }, { passive: false });
@@ -547,8 +619,11 @@
       lastTapTime = now;
     }, { passive: false });
 
-    syncMealPeriod();
+    slides.addEventListener("scroll", syncDots, { passive: true });
     pickButton.addEventListener("click", pickDish);
+
+    syncMealPeriod();
+    syncDots();
   </script>
 </body>
 </html>
