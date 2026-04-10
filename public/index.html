@@ -199,7 +199,7 @@
       align-items: flex-start;
       justify-content: center;
       gap: 16px;
-      min-height: 300px;
+      min-height: 320px;
     }
 
     .result-label {
@@ -235,6 +235,20 @@
       font-size: 17px;
       font-weight: 600;
       box-shadow: inset 0 0 0 1px rgba(178, 218, 203, 0.34);
+    }
+
+    .recipe {
+      min-height: 50px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--text-sub);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .recipe strong {
+      color: var(--text-main);
     }
 
     .hint {
@@ -364,6 +378,11 @@
       border: 1px solid rgba(232, 223, 191, 0.5);
     }
 
+    .status {
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
     @media (max-width: 420px) {
       .shell {
         padding: 10px;
@@ -386,7 +405,7 @@
       }
 
       .result {
-        min-height: 272px;
+        min-height: 296px;
         padding: 18px;
       }
 
@@ -424,6 +443,7 @@
           <div class="result-label" id="resultLabel">当前推荐</div>
           <h2 class="dish-name" id="dishName">点一下开始抽菜</h2>
           <div class="rating" id="dishRating">等待推荐</div>
+          <div class="recipe" id="dishRecipe"><strong>小教程：</strong>加载菜单中…</div>
           <div class="hint" id="dishHint">想换一道，就再点一次。</div>
         </div>
 
@@ -436,10 +456,11 @@
               <span class="dot"></span>
             </div>
           </div>
+          <div class="status" id="adultStatus"></div>
         </div>
 
         <footer class="footer">
-          <span>40 道菜随机推荐</span>
+          <span id="adultCount">菜单加载中</span>
           <span>佳燃股份</span>
         </footer>
       </section>
@@ -452,27 +473,10 @@
 
         <header class="hero">
           <h2 class="baby-title">小茉莉 <span>吃什么</span></h2>
-          <p class="baby-subtext">适合 1 岁宝宝的日常吃饭图鉴，先从软、碎、清淡开始。</p>
+          <p class="baby-subtext">适合 1 岁宝宝的日常吃饭建议，先从软、碎、清淡开始。</p>
         </header>
 
-        <div class="baby-grid">
-          <article class="baby-card">
-            <h3>主食</h3>
-            <p>软米饭、小面条、南瓜粥、山药粥、小馄饨。</p>
-          </article>
-          <article class="baby-card">
-            <h3>蛋白质</h3>
-            <p>蒸蛋、鸡肉末、鱼肉泥、牛肉碎、嫩豆腐。</p>
-          </article>
-          <article class="baby-card">
-            <h3>蔬菜</h3>
-            <p>西兰花碎、胡萝卜丁、土豆泥、冬瓜碎、菠菜末。</p>
-          </article>
-          <article class="baby-card">
-            <h3>水果</h3>
-            <p>香蕉、蒸苹果、牛油果、梨泥、熟透的猕猴桃。</p>
-          </article>
-        </div>
+        <div class="baby-grid" id="babyGrid"></div>
 
         <div class="baby-note">尽量少盐少糖，注意大小和软硬度，避免整颗坚果、整粒葡萄这类容易噎住的食物。</div>
 
@@ -485,7 +489,7 @@
         </div>
 
         <footer class="footer">
-          <span>宝宝吃饭也可以慢慢决定</span>
+          <span id="babyCount">宝宝菜单加载中</span>
           <span>佳燃股份</span>
         </footer>
       </section>
@@ -493,58 +497,22 @@
   </main>
 
   <script>
-    const menu = [
-      { name: "吊龙炒胡萝卜", rating: "★★★★★（5 星）" },
-      { name: "豆角炒蛋", rating: "★★★★★（5 星）" },
-      { name: "炖排骨", rating: "★★★★☆（4 星半）" },
-      { name: "炖鸡", rating: "★★★★☆（4 星半）" },
-      { name: "炒五花肉", rating: "★★★★（4 星）" },
-      { name: "西红柿炒鸡蛋", rating: "★★★★★（5 星）" },
-      { name: "青椒土豆丝", rating: "★★★★（4 星）" },
-      { name: "蒜蓉油麦菜", rating: "★★★★（4 星）" },
-      { name: "韭菜炒鸡蛋", rating: "★★★★（4 星）" },
-      { name: "红烧排骨", rating: "★★★★☆（4 星半）" },
-      { name: "番茄土豆炖牛腩", rating: "★★★★☆（4 星半）" },
-      { name: "蒜苔炒肉", rating: "★★★★（4 星）" },
-      { name: "木耳炒鸡蛋", rating: "★★★★（4 星）" },
-      { name: "清炒西兰花", rating: "★★★★（4 星）" },
-      { name: "冬瓜排骨汤", rating: "★★★★☆（4 星半）" },
-      { name: "香菇滑鸡", rating: "★★★★☆（4 星半）" },
-      { name: "麻婆豆腐", rating: "★★★★（4 星）" },
-      { name: "手撕包菜", rating: "★★★★（4 星）" },
-      { name: "干煸豆角", rating: "★★★★（4 星）" },
-      { name: "白灼菜心", rating: "★★★★（4 星）" },
-      { name: "宫保鸡丁", rating: "★★★★☆（4 星半）" },
-      { name: "鱼香肉丝", rating: "★★★★☆（4 星半）" },
-      { name: "可乐鸡翅", rating: "★★★★★（5 星）" },
-      { name: "清蒸鲈鱼", rating: "★★★★☆（4 星半）" },
-      { name: "酸辣土豆丝", rating: "★★★★（4 星）" },
-      { name: "丝瓜炒蛋", rating: "★★★★（4 星）" },
-      { name: "芹菜香干炒肉", rating: "★★★★（4 星）" },
-      { name: "豆芽炒肉丝", rating: "★★★★（4 星）" },
-      { name: "萝卜炖牛腩", rating: "★★★★☆（4 星半）" },
-      { name: "土豆烧肉", rating: "★★★★（4 星）" },
-      { name: "蚝油生菜", rating: "★★★★（4 星）" },
-      { name: "凉拌黄瓜", rating: "★★★★（4 星）" },
-      { name: "蒜蓉粉丝娃娃菜", rating: "★★★★（4 星）" },
-      { name: "香煎豆腐", rating: "★★★★（4 星）" },
-      { name: "豆角炒肉", rating: "★★★★（4 星）" },
-      { name: "莲藕炒肉", rating: "★★★★（4 星）" },
-      { name: "南瓜炒肉片", rating: "★★★★（4 星）" },
-      { name: "海带排骨汤", rating: "★★★★☆（4 星半）" },
-      { name: "山药炒木耳", rating: "★★★★（4 星）" },
-      { name: "香菇炒青菜", rating: "★★★★（4 星）" }
-    ];
-
     const slides = document.getElementById("slides");
     const dots = document.querySelectorAll(".page-nav .dot");
     const mealTag = document.getElementById("mealTag");
     const resultLabel = document.getElementById("resultLabel");
     const dishName = document.getElementById("dishName");
     const dishRating = document.getElementById("dishRating");
+    const dishRecipe = document.getElementById("dishRecipe");
     const dishHint = document.getElementById("dishHint");
     const pickButton = document.getElementById("pickButton");
+    const adultStatus = document.getElementById("adultStatus");
+    const adultCount = document.getElementById("adultCount");
+    const babyGrid = document.getElementById("babyGrid");
+    const babyCount = document.getElementById("babyCount");
 
+    let adultMenu = [];
+    let babyMenu = [];
     let lastIndex = -1;
     let lastTapTime = 0;
 
@@ -581,21 +549,45 @@
     }
 
     function pickDish() {
-      let index = Math.floor(Math.random() * menu.length);
+      if (adultMenu.length === 0) {
+        adultStatus.textContent = "菜单还没加载完成。";
+        return;
+      }
 
-      if (menu.length > 1) {
+      let index = Math.floor(Math.random() * adultMenu.length);
+
+      if (adultMenu.length > 1) {
         while (index === lastIndex) {
-          index = Math.floor(Math.random() * menu.length);
+          index = Math.floor(Math.random() * adultMenu.length);
         }
       }
 
       lastIndex = index;
-      const selected = menu[index];
+      const selected = adultMenu[index];
       const period = getMealPeriod();
 
-      dishName.textContent = selected.name;
-      dishRating.textContent = selected.rating;
+      dishName.textContent = selected.name_zh;
+      dishRating.textContent = selected.rating_label;
+      dishRecipe.innerHTML = "<strong>小教程：</strong>" + selected.short_recipe;
       dishHint.textContent = period.hint;
+      adultStatus.textContent = "来自 D1 菜单库";
+    }
+
+    function renderBabyMenu() {
+      if (babyMenu.length === 0) {
+        babyGrid.innerHTML = "<article class=\"baby-card\"><h3>暂时没有数据</h3><p>等菜单入库后，这里会自动显示。</p></article>";
+        babyCount.textContent = "宝宝菜单暂时为空";
+        return;
+      }
+
+      babyGrid.innerHTML = babyMenu.map((dish) => `
+        <article class="baby-card">
+          <h3>${dish.name_zh}</h3>
+          <p>${dish.short_recipe}</p>
+        </article>
+      `).join("");
+
+      babyCount.textContent = `宝宝菜单 ${babyMenu.length} 条`;
     }
 
     function syncDots() {
@@ -603,6 +595,38 @@
       dots.forEach((dot, index) => {
         dot.classList.toggle("is-active", index === pageIndex);
       });
+    }
+
+    async function loadMenu() {
+      adultStatus.textContent = "正在读取菜单库…";
+
+      try {
+        const [adultResponse, babyResponse] = await Promise.all([
+          fetch("/api/dishes?audience=adult"),
+          fetch("/api/dishes?audience=baby")
+        ]);
+
+        if (!adultResponse.ok || !babyResponse.ok) {
+          throw new Error("menu request failed");
+        }
+
+        const adultData = await adultResponse.json();
+        const babyData = await babyResponse.json();
+
+        adultMenu = adultData.dishes || [];
+        babyMenu = babyData.dishes || [];
+
+        adultCount.textContent = `共 ${adultMenu.length} 道菜`;
+        adultStatus.textContent = "菜单已连接 D1";
+        dishRecipe.innerHTML = "<strong>小教程：</strong>菜单就绪，点一下开始抽菜。";
+
+        renderBabyMenu();
+      } catch (error) {
+        adultStatus.textContent = "菜单读取失败";
+        adultCount.textContent = "暂时无法读取菜单";
+        dishRecipe.innerHTML = "<strong>小教程：</strong>接口暂时不可用，请稍后再试。";
+        renderBabyMenu();
+      }
     }
 
     document.addEventListener("dblclick", (event) => {
@@ -624,6 +648,7 @@
 
     syncMealPeriod();
     syncDots();
+    loadMenu();
   </script>
 </body>
 </html>
